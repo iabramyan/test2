@@ -1,0 +1,686 @@
+* {
+    box-sizing: border-box; /*для дальнейшей удобной работы с элементами*/
+}
+
+body {
+    margin: 0;
+    background-color: #F4F4F4;
+    font-family: 'Roboto', sans-serif;
+}
+
+img {
+    display: block; /*чтобы не было отступа под картинкой и не было расхождения с пиксель пёрфект*/
+}
+
+.container {
+    max-width: 1200px; /*было 1170рх*/
+    margin: 0 auto;
+    /*padding-top: 60px; /*отступ сверху, как на макете*/
+    /*padding-bottom: 60px; /*чтобы нижняя кнопка не касалась низа страницы при скроле*/
+    padding: 60px 15px; /*сверху-снизу слева-справа, добавили для ужобства в мобильной адаптации*/
+}
+
+@media (max-width: 1200px) {
+    .container {
+        width: 830px;
+    }
+}
+
+@media (max-width: 829px) {
+    .container {
+        width: 600px;
+    }
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.main {
+    width: 870px;
+}
+
+.sidebar {
+    min-width: 200px; /*опираемся на эту ширину под планшет*/
+    width: 270px;
+}
+
+@media (max-width: 829px) {
+    .sidebar {
+        /*display: none;*/
+        margin-left: 0 !important;
+        position: fixed;
+        top: 0;
+        bottom: 0; /*это добавили для того, чтобы можно было скролить, вернее, сайдбар не бедет заходить за экран и стоять статично, хотя и был position: fixed;*/
+        left: 0;
+        background-color: #fff;
+        padding: 15px;
+        box-shadow: 0px 0px 20px 4px rgb(0 0 0 / 37%);
+        overflow-y: scroll; /*чтобы можно было скролить сайдбар, в данном случае можно было и написать auto*/
+        transform: translateX(-150%);
+        transition: transform 0.4s ease-in; /*сайдбар плавно выйдет сбоку*/
+    }
+
+    .sidebar--mobile-active {
+        transform: translateX(-0%); /*чтобы показать сайдбар*/
+    }
+}
+
+.main + .sidebar { /*строгий отступ от .main и .sidebar*/
+    margin-left: 30px;
+}
+
+.cards-holder {
+    display: flex;
+    flex-wrap: wrap; /*перенос флекс-элементов, чтобы они не выводились в одну строку*/
+    justify-content: space-between;
+}
+
+@media (max-width: 599px) {
+    .cards-holder {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.cards-holder > .card-link { /*для всех элементов .cards-holder, внутри которых лежат .card-link*/
+    margin-bottom: 30px;
+}
+
+.card-link--hidden {
+    display: none !important; /*чтобы inline: block; у a.card-link не перебивал работу JS мы добавили !important*/
+}
+
+/*Cards*/
+
+a.card-link {
+    display: inline-block; /*нужно перевести строчный элемент в блочный (любой блочный), чтобы эффекты корректно работали*/
+    text-decoration: none;
+    transition: all 0.2s ease-in;
+}
+
+a.card-link:hover {
+    opacity: 0.8;
+    transform: translateY(-5px);
+}
+
+.card {
+    position: relative;
+    background-color: #fff;
+    width: 270px;
+}
+
+.card__badges {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    right: 15px;
+    display: flex;
+}
+
+.card__badges > * + * { /*так мы обращаемся к вложенному элементу и его соседу справа, будем делать расстояние между двумя бейджами*/
+    margin-left: 10px;
+} 
+
+.card__badge {
+    display: inline-block;
+    height: 22px;
+    padding: 0px 10px;
+    background-color: #a3a3a3;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 23px; /*высота у бэйджика 22рх, а не 16рх (1.14), т.к. строка одна и высоту строки берём как высоту всего элемента, чтобы текст стоял ровно по центру*/
+    color: #000;
+}
+
+.card__badge--class { /*окрасим бэйджи по модификатору*/
+    background: #FFCF26;
+}
+
+.card__badge--credit {
+    background: #11BE75;
+    color: #fff;
+}
+
+.card__content {
+    padding: 16px 20px 15px;
+}
+
+.card__title {
+    margin: 0; /*сбрасываем возможные заводские свойствадля h4*/
+    margin-bottom: 11px;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 1.16; /*исходные 21рх значения данного свойства мы разделили на 18рх (сверху свойство) и получили такой множитель*/
+    color: #000;
+}
+
+.card__term {
+    margin-bottom: 11px;
+    font-size: 14px;
+    line-height: 1.14;
+    color: #000;
+
+}
+
+.card__metro {
+    margin-bottom: 11px;
+    font-size: 14px;
+    line-height: 1.14;
+    color: #000;
+}
+
+.card__metro::before {
+    content: ""; /*контент тут как пустая строка, чтобы псевдоэлемент отобразился*/
+    margin-right: 10px;
+    display: inline-block; /*чтобы элемент стоял слева, либо это можно сделать через position: absolute, но тогда соседнему элементу прописать position: relative*/
+    vertical-align: baseline; /*выыравнивание, чтобы этот добавленный элемент выровнялся по средней линии соседнего текста*/
+    width: 16px;
+    height: 11px;
+    /*background: red;*/ /*использовали только для проверки создания псевдоэлемента*/
+    background-image: url('./../img/icons/metro.svg'); /*указываем путь относительно css-файла*/
+    background-repeat: no-repeat;
+    background-size: initial; /*изначальный размер фонового изображения*/
+}
+
+.card__address {
+    font-size: 14px;
+    line-height: 1.14;
+    color: #777;
+}
+
+/*Button more*/
+
+.btn-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 80px;
+
+    background-color: #E5E5E5;
+    border-radius: 4px;
+    border: none;
+
+    text-align: center;
+    font-size: 18px;
+    line-height: 21px;
+    color: #4290c9;
+
+    cursor: pointer;
+    transition: background-color 0.2s ease-in;
+}
+
+.btn-more:hover {
+    background-color: #d8d8d8;
+}
+
+.btn-more img {
+    /*display: inline-block;*/ /*сейчас пишем так, чтобы картинка в кнопке отображалась правильно, т.к. до этого всем картинкам мы задали display: block*/ /*можно убрать, если флекс-элемент*/
+    margin-right: 10px;
+    /*vertical-align: bottom;*/ /*тут нужно подобрать необходимое свойство для корректного отображения, в данном случае - bottom*/ /*можно убрать, если флекс-элемент*/
+}
+
+/*Sidebar*/
+
+.widget + .widget { /*виджет и следующий за ним виджет*/
+    margin-top: 33px;
+}
+
+.widget--top-30 {
+    margin-top: 30px !important; /*это добавили для пиксель пёрфекта, а чтобы заработало, добавили важность, потому что отступы между виджетами были заданы через селектор +, а он имеет приоритет выше*/
+}
+
+.widget__title {
+    position: relative;
+    margin-bottom: 21px;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 1.16;
+    color: #000000;
+    cursor: pointer;
+}
+
+.widget__title::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    /*background-color: red;*/
+    position: absolute;
+    right: 1px;
+    top: -1px;
+    background-image: url('./../img/icons/chevron-up.svg');
+    background-repeat: no-repeat;
+    background-size: initial;
+    background-position: center;
+    transition: all 0.3s ease-in;
+}
+
+.widget__title--active::after {
+    transform: rotate(180deg);
+}
+
+.widget__body {
+    
+}
+
+.widget__body--hidden {
+    display: none;
+}
+
+/* Location buttons group */
+
+.location {
+
+}
+
+.location__row {
+    display: flex;
+}
+
+.location__row:first-child { /*выбрали первого и последнего (внизу) ребёнка родительского элемента с классом location__row*/
+    overflow: hidden; /*для того, чтобы элементы не выходили за пределы*/
+    border-radius: 4px 4px 0 0 ;
+    border: 1px solid #d6d6d6;
+}
+
+.location__row:last-child {
+    overflow: hidden; /*этот ряд (оба т.е.) будут ограничивать элементы внутри себя*/
+    border-radius: 0 0 4px 4px;
+    border: 1px solid #d6d6d6;
+    border-top: none;
+}
+
+.location__btn {
+    flex-grow: 1; /*свойство, чтобы флекс-элементы (кнопки) занимали всю ширину пространства*/
+
+    font-family: inherit;
+    height: 48px;
+    padding: 0 15px;
+
+    background-color: transparent;
+    border: none;
+
+    text-align: center;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 50px; /*тут этот показатель равен с общей высотой кнопки, так как кнопки сделаны через label, и в этом случае, чтобы текст встал по центру, нужно выбрать так*/
+    color: #3c3c3c;
+
+    cursor: pointer;
+    transition: background-color 0.2s ease-in;
+}
+
+.location__btn:hover {
+    background-color: #fff0bb;
+}
+
+.location__checkbox { /*тут мы скрыли иконки чекбоксов*/
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    opacity: 0;
+    appearance: none;
+}
+
+.location__checkbox:checked + .location__btn {
+    background-color: #ffcf26;
+}
+
+.location__checkbox:checked + .location__btn:hover {
+    background-color: #e0b000;
+}
+
+/*.location__btn--active {
+    background-color: #ffcf26;
+}*/
+
+/*.location__btn--active:hover {
+    background-color: #e0b000;
+}*/
+
+/* Radio */
+
+.radio {
+    display: block;
+    cursor: pointer;
+}
+
+.radio + .radio {
+    margin-top: 15px;
+}
+
+.radio__real {
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    opacity: 0;
+    appearance: none;
+}
+
+.radio__fake {
+    position: relative;
+    display: inline-block; /*т.к. данный элемент был span, то ему нужно задать inline-block*/
+    margin-right: 7px;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border: 1px solid #777777;
+    border-radius: 50%; /*чтобы нарисовать круг*/
+    vertical-align: bottom;
+}
+
+.radio__real:checked + .radio__fake {
+    background-color: #ffe074;
+}
+
+.radio__real:checked + .radio__fake::before {
+    position: absolute; /*позиционирование чёрной точки внутри будет относительно radio__fake*/
+    top: 50%;
+    left: 50%;
+    content: "";
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
+    background: #3c3c3c;
+    transform: translate(-50%,-50%); /*поставили по центру эту чёрную точку вместе со свойствами top и left*/
+}
+
+.radio__real:checked ~ .radio__title { /*знак тильда означает выбрать элемент .radio__real:checked рядом стоящий (ближайший) с .radio__title*/
+    font-weight: 500;
+}
+
+.radio__title {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.18;
+    color: #000;
+}
+
+/*Chekbox*/
+
+.checkbox {
+    display: block;
+    cursor: pointer;
+}
+
+.checkbox--hidden {
+    display: none;
+}
+
+.checkbox + .checkbox {
+    margin-top: 15px;
+}
+
+.checkbox__real {
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    opacity: 0;
+    appearance: none;
+}
+
+.checkbox__fake {
+    position: relative;
+    display: inline-block; /*т.к. данный элемент был span, то ему нужно задать inline-block*/
+    margin-right: 7px;
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    border: 1px solid #777777;
+    border-radius: 2px;
+    vertical-align: bottom;
+}
+
+.checkbox__real:checked + .checkbox__fake {
+    background-color: #ffe074;
+}
+
+.checkbox__real:checked + .checkbox__fake::before {
+    position: absolute;
+    content: "";
+    top: 50%;
+    left: 50%;
+    width: 18px;
+    height: 18px;
+    background-image: url('./../img/icons/check.svg');
+    background-size: initial;
+    background-position: center;
+    transform: translate(-50%,-50%);
+}
+
+.checkbox__real:checked ~ .checkbox__title {
+    font-weight: 500;
+}
+
+.checkbox__title {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.18;
+    color: #000;
+}
+
+/* Hidden elements widget */
+
+.widget__hidden {
+    display: none;
+}
+
+.widget__btn-show-hidden {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 1.19;
+    color: #4290c9;
+    cursor: pointer;
+    transition: opacity 0.2s ease-in;
+}
+
+.widget__btn-show-hidden:active,
+.widget__btn-show-hidden:focus {
+    outline: none;
+} 
+
+.widget__btn-show-hidden:hover {
+    color: #007fda;
+    text-decoration: underline;
+}
+
+/* Toggle */
+
+.toggle {
+    cursor: pointer;
+}
+
+.toggle__real {
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    opacity: 0;
+    appearance: none;
+}
+
+.toggle__fake {
+    position: relative;
+    display: inline-block;
+    margin-right: 7px;
+    width: 37px;
+    height: 20px;
+    background-color: #c4c4c4;
+    border-radius: 10px;
+    vertical-align: bottom;
+    transition: all 0.2s ease-in;
+}
+
+.toggle__fake::before {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    content: "";
+    width: 16px;
+    height: 16px;
+    background-color: #3c3c3c;
+    border-radius: 50%;
+    transition: all 0.2s ease-in;
+}
+
+.toggle__real:checked + .toggle__fake {
+    background-color: #ffe074;
+}
+
+.toggle__real:checked + .toggle__fake::before {
+    left: 19px; /*сбросили два пикселя в предыдущем блоке, круг тоггла переместился вправо*/ /*сделали только значения для left, чтобы было плавное перемещение*/
+    /*right: 2px;*/
+}
+
+.toggle__title {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.18;
+    color: #000;
+}
+
+.toggle__real:checked ~ .toggle__title {
+    font-weight: 500;
+}
+
+/* Form buttons */
+
+.form-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 50px;
+
+    border: 1px solid #d6d6d6;
+    border-radius: 4px;
+    background-color: transparent;
+    
+    font-family: inherit;
+    text-align: center;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 1;
+    color: #3c3c3c;
+
+    cursor: pointer;
+    transition: background-color 0.2s ease-in;
+}
+
+.form-btn img {
+    /*display: inline-block;*/
+    margin-right: 6px;
+    /*vertical-align: middle;*/
+    /*margin-top: -2px;*/
+}
+
+.form-btn:hover {
+    background-color: #d8d8d8;
+}
+
+.form-btn + .form-btn {
+    margin-top: 10px;
+}
+
+.form-btn--submit {
+    background-color: #FFCF26;
+    border: none;
+    color: #000000;
+}
+
+.form-btn--submit:hover {
+    background-color: #e0b000;
+}
+
+/* Button toggle-sidebar */
+
+.toggle-sidebar { /* ячейка для кнопки .menu-icon-wrapper */
+    display: none; /*мы верстали desktop first, поэтому изначально наша кнопка скрыта*/
+    position: fixed;
+    z-index: 9;
+    right: 15px;
+    top: 8px;
+    width: 45px;
+    height: 45px;
+    background-color: rgb(71, 71, 71);
+    border: none;
+    padding: 0; /*можно убрать (после нового решения с флекс), чтобы наша кнопка меню отобразилась правильно, а сделана она через тег button, то нужно убрать padding у button, которые есть по умолчанию*/
+    justify-content: center;
+    align-items: center; /*решили через флекс отображение, но можно было просто у .menu-icon-wrapper поставить ширину и выосту тоже по 45рх*/
+}
+
+@media (max-width: 829px) {
+    .toggle-sidebar {
+        display: flex;
+    }
+}
+
+.menu-icon-wrapper {
+    /*background-color: red;*/
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0; /*пишем эти свойства (что и внизу), потому что данный элемент теперь кнопка, и нужно сбросить стили кновки*/
+    border: none;
+    background-color: transparent;
+}
+
+.menu-icon {
+    position: relative;
+    width: 30px;
+    height: 5px;
+    background-color: #fff;
+}
+
+.menu-icon::before {
+    position: absolute;
+    left: 0;
+    top: -10px;
+    content: '';
+    width: 30px;
+    height: 5px;
+    background-color: #fff;
+    transition: transform 0.2s ease-in, top 0.2s linear 0.2s;
+}
+
+.menu-icon::after {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    content: '';
+    width: 30px;
+    height: 5px;
+    background-color: #fff;
+    transition: transform 0.2s ease-in, top 0.2s linear 0.2s;
+}
+
+.menu-icon.menu-icon-active {
+    background-color: transparent;
+}
+
+.menu-icon.menu-icon-active::before {
+    transform: rotate(-45deg);
+    top: 0;
+    transition: top 0.2s linear, transform 0.2s ease-in 0.2s;
+}
+
+.menu-icon.menu-icon-active::after {
+    transform: rotate(45deg);
+    top: 0;
+    transition: top 0.2s linear, transform 0.2s ease-in 0.2s;
+}
+
